@@ -1,5 +1,5 @@
 # Pokemon images list
-Relates PokemonAPI result to official images
+Relates PokeAPI results to official images 😊
 
 <p align="center">
 <a href="https://github.com/rihor/pokemon-image-list/blob/master/LICENSE"><img alt="License: MIT" src="https://black.readthedocs.io/en/stable/_static/license.svg"></a>
