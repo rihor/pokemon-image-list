@@ -5,10 +5,11 @@ verify_ssl = true
 
 [dev-packages]
 pylint = "*"
+black = "*"
 
 [packages]
 requests = "*"
-re = "*"
+json = "*"
 
 [requires]
 python_version = "3.8"

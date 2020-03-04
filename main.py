@@ -1,52 +1,38 @@
+"""
+Code that links images of pokemon from the official website with their
+names and ids and generates a JSON file
+"""
+import json
 import requests
-import re
 
-def getImgFromBulbapedia(bulbapedia_page, p_id, p_name):  
-  pattern = f"cdn.bulbagarden.net\/upload\/[a-zA-Z0-9]*\/[a-zA-Z0-9]*\/{p_id}{p_name}.png"
-  result = re.search(pattern, bulbapedia_page)
-  if(result != None):
-    result = result.group()
-  return result
+NUM_OF_POKEMONS = 808
+POKEMONS = []
 
-def formatName(name):
-  formatted_name = name.capitalize()
+for i in range(1, NUM_OF_POKEMONS):
+    rs_pokemon = requests.get(f"https://pokeapi.co/api/v2/pokemon/{i}")
+    pokemon = rs_pokemon.json()
 
-  if(name.endswith('-f') or name.endswith('-m')):
-    print(formatted_name)
-    formatted_name = formatted_name[:-len('-f')]
-  
-  return formatted_name
+    p_id = str(pokemon["id"]).zfill(3)
+    p_name = pokemon["name"]
 
-pokemons = [] 
-iterator = 28
+    rs_image_high = (
+        f"https://assets.pokemon.com/assets/cms2/img/pokedex/full/{p_id}.png"
+    )
+    rs_image_small = (
+        f"https://assets.pokemon.com/assets/cms2/img/pokedex/detail/{p_id}.png"
+    )
 
-while(True):
-  pokemon_result = requests.get('https://pokeapi.co/api/v2/pokemon/' + str(iterator))
-  
-  if pokemon_result.status_code != 200:
-    break
+    POKEMONS.append(
+        {
+            "id": p_id,
+            "name": p_name,
+            "image_hq": rs_image_high,
+            "image": rs_image_small,
+        }
+    )
 
-  pokemon = pokemon_result.json()
-  p_id = str(pokemon['id']).zfill(3)
-  p_name = formatName(pokemon['name'])
-  bulbapedia_url = "https://bulbapedia.bulbagarden.net/wiki/File:" + str(p_id) + str(p_name) + ".png"
-  print('========')
-  print(bulbapedia_url)
-  print('========')
-  bulbapedia_page = requests.get(bulbapedia_url).text
-  
-  image_url = getImgFromBulbapedia(bulbapedia_page, p_id, p_name)  
-  print(image_url)
-  if(image_url == None):
-    print('Image not found of Pokemon {i}!'.format(i=iterator))
-    break
+    print(f"id:{p_id} name:{p_name} succefully added!")
 
-  image_result = requests.get(f"http://{image_url}")  
-  if(image_result.status_code != 200):
-    print('Image not found of Pokemon {i}!'.format(i=iterator))
-    break
 
-  pokemon['image_url'] = image_url
-  pokemons.append(pokemon)
-  iterator += 1
-  print(f"Pokemon: id = {p_id} name = {p_name} url = {pokemon['image_url']}")
+with open("pokemons.json", "w") as outfile:
+    json.dump(POKEMONS, outfile, indent=2)
