@@ -1,4 +1,5 @@
 # Pokemon images list
+
 Relates PokeAPI results to official images 😊
 
 <p align="center">
@@ -18,8 +19,23 @@ python main.py
 
 This will generate a `pokemons.json` file.
 
-This file contains:
-- id: PokeAPI's pokemon id
-- name: PokeAPI's pokemon name
-- image_hq: High resolution image of pokemon
-- image: Lower resolution image of pokemon
+Each entry on the JSON file will contain:
+
+```json
+{
+  "id": "001",
+  "name": "bulbasaur",
+  "image_hq": "https://assets.pokemon.com/assets/cms2/img/pokedex/full/001.png",
+  "image": "https://assets.pokemon.com/assets/cms2/img/pokedex/detail/001.png",
+  "types": [
+    {
+      "name": "poison",
+      "slot": 2
+    },
+    {
+      "name": "grass",
+      "slot": 1
+    }
+  ]
+},
+```
