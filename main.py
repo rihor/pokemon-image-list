@@ -21,18 +21,24 @@ while True:
     P_ID = str(POKEMON["id"]).zfill(3)
     P_NAME = POKEMON["name"]
 
+    P_TYPES = []
+    for TYPE in POKEMON["types"]:
+        P_TYPES.append({"name": TYPE["type"]["name"], "slot": TYPE["slot"]})
+
+    # make an dict with only essentials to a preview
     POKEMONS.append(
         {
             "id": P_ID,
             "name": P_NAME,
             "image_hq": f"https://assets.pokemon.com/assets/cms2/img/pokedex/full/{P_ID}.png",
             "image": f"https://assets.pokemon.com/assets/cms2/img/pokedex/detail/{P_ID}.png",
+            "types": P_TYPES,
         }
     )
 
     print(f"id:{P_ID} name:{P_NAME} succefully added!")
     ITERATOR += 1
 
-
+# saves the data to JSON
 with open("pokemons.json", "w") as outfile:
     json.dump(POKEMONS, outfile, indent=2)
